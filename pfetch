@@ -614,7 +614,10 @@ get_pkgs() {
                 has apk        && apk info
                 has guix       && guix package --list-installed
                 has opkg       && opkg list-installed
+                has radula     && radula -ch
                 has flatpak    && flatpak list
+                has snap       && snap list
+                has cargo      && cargo install --list
 
                 # Directories containing packages.
                 has kiss       && printf '%s\n' /var/db/kiss/installed/*/
@@ -635,6 +638,7 @@ get_pkgs() {
                 # Commands which print packages one per line.
                 has scoop      && scoop list
                 has winget     && winget list
+                has chocolatey && choco list --local-only
                 has pacman-key && pacman -Qq
             ;;
 
