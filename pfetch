@@ -509,6 +509,8 @@ get_host() {
     done
 
     # '$arch' is the cached output from 'uname -m'.
+    [ -n "$PF_HOST" ] && host="$PF_KERNEL"
+    [ -n "$PF_KERNEL" ] && kernel="$PF_KERNEL"
     log host "${host:-$arch}" >&6
 }
 
@@ -1978,17 +1980,17 @@ odddd${c2}OMXk00OkOO${c7}ddddo
 				${c3} .;,                 ,;.
 			EOF
         ;;
-
-	([Oo]pen[Ii]ndiana*)
+        
+        ([Oo]pen[Ii]ndiana*)
             read_ascii 3 <<-EOF
-                        ${c7}         ⠛
-                        ${c7}   ${c4}⣠⠶⠒⠦⡄${c7} ⣶
-                        ${c7}  ${c4}⢰⡇   ⢹⡀${c7}⣿  ⠈⢠
-                        ${c7}  ${c4}⠘⣇  ⢀⡼ ${c7}⣿  ⡠⠃
-                        ${c7}⢀⠔${c4} ⠈⠙⠛⠋ ${c7}⢀⡻⠔⠉
-                        ${c7}⢆⣀⣀⣀⣠⠤⠔⠚⠉
-                        ${c7}  ⠁
-                        EOF
+			${c7}         ⠛
+			${c7}   ${c4}⣠⠶⠒⠦⡄${c7} ⣶
+			${c7}  ${c4}⢰⡇   ⢹⡀${c7}⣿  ⠈⢠
+			${c7}  ${c4}⠘⣇  ⢀⡼ ${c7}⣿  ⡠⠃
+			${c7}⢀⠔${c4} ⠈⠙⠛⠋ ${c7}⢀⡻⠔⠉
+			${c7}⢆⣀⣀⣀⣠⠤⠔⠚⠉
+			${c7}  ⠁
+			EOF
         ;;
 
         ([Uu]buntu*)
