@@ -509,7 +509,7 @@ get_host() {
     done
 
     # '$arch' is the cached output from 'uname -m'.
-    [ -n "$PF_HOST" ] && host="$PF_KERNEL"
+    [ -n "$PF_HOST" ] && host="$PF_HOST"
     [ -n "$PF_KERNEL" ] && kernel="$PF_KERNEL"
     log host "${host:-$arch}" >&6
 }
