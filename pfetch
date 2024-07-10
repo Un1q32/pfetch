@@ -409,6 +409,11 @@ get_os() {
             trap '' EXIT
         ;;
 
+        (MorphOS)
+            distro="$os $kernel"
+            kernel=$(uname -v)
+        ;;
+
         (SunOS)
             # Grab the first line of the '/etc/release' file
             # discarding everything after '('.
