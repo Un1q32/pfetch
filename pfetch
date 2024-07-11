@@ -454,6 +454,11 @@ get_kernel() {
         (CYGWIN*|MSYS*|MINGW*|Windows_NT)
             kernel=$(wmic_read os get Version)
         ;;
+
+        # Use uname to get the Kickstart version
+        (MorphOS)
+            kernel=$(uname -v)
+        ;;
     esac
 
     # '$kernel' is the cached output of 'uname -r'.
