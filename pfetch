@@ -4,6 +4,9 @@
 
 # Wrapper around all escape sequences used by pfetch to allow for
 # greater control over which sequences are used (if any at all).
+
+[ -n "$ZSH_VERSION" ] && emulate sh
+
 esc() {
     case $1 in
         CUU) e="${esc_c}[${2}A" ;; # cursor up
@@ -158,7 +161,7 @@ log() {
 }
 
 wmic_read() {
-    # This function is used to remove useless garbage from wmic output.
+    # This function is used to remove garbage from the output of 'wmic'.
     {
         read -r line # discard the first line
         while IFS= read -r line; do
@@ -261,7 +264,7 @@ get_os() {
             # Android detection works by checking for the existence of
             # the following two directories. I don't think there's a simpler
             # method than this.
-            elif [ -d /system/app ] && [ -d /system/priv-app ]; then
+            elif [ -d /system/app ] && [ -d /system/priv-app ] && has getprop; then
                 distro="Android $(getprop ro.build.version.release)"
 
             elif [ -f /etc/os-release ]; then
@@ -487,8 +490,9 @@ get_host() {
         ;;
 
         (Darwin*|FreeBSD*|DragonFly*)
+            # '$arch' is the cached output from 'uname -m'.
             case $distro in
-                iOS*) host=$(uname -m)           ;;
+                iOS*) host=$arch                 ;;
                 *)    host=$(sysctl -n hw.model) ;;
             esac
         ;;
@@ -1411,19 +1415,21 @@ get_palette() {
 }
 
 strip_color_code_stuff() {
-    # This function is used to strip '\033[3*m' color codes from the ascii art
+    # This function is used to strip '\033[3Xm' color codes from the ascii art
     # so they don't affect the width variable.
-    if has awk; then
-        # prefer awk, as some versions of Android shipped with a broken 'sed' command
-        awk '{gsub("\\[3.m","");print}'
-    elif has sed; then
-        sed 's/\[3.m//g'
-    else
-        # Just print the input if no sed or awk
-        while IFS= read -r line; do
-            printf '%s\n' "$line"
+    while IFS= read -r line; do
+        while :; do
+            case $line in
+                *\[3?m*)
+                    line="${line%%\[3?m*}${line#*\[3?m}"
+                ;;
+                *)
+                    break
+                ;;
+            esac
         done
-    fi
+        printf '%s\n' "$line"
+    done
 }
 
 get_ascii() {
@@ -1686,13 +1692,13 @@ get_ascii() {
         ;;
 
         ([Ee]ndeavour*)
-            read_ascii 4 <<-EOF
-				      ${c1}/${c4}\\
-				    ${c1}/${c4}/  \\${c6}\\
-				   ${c1}/${c4}/    \\ ${c6}\\
-				 ${c1}/ ${c4}/     _) ${c6})
-				${c1}/_${c4}/___-- ${c6}__-
-				 ${c6}/____--
+            read_ascii 5 <<-EOF
+				      ${c1}/${c5}\\
+				    ${c1}/${c5}/  \\${c4}\\
+				   ${c1}/${c5}/    \\ ${c4}\\
+				 ${c1}/ ${c5}/     _) ${c4})
+				${c1}/_${c5}/___-- ${c4}__-
+				 ${c4}/____--
 			EOF
         ;;
 
