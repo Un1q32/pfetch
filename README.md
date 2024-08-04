@@ -78,6 +78,10 @@ PF_SEP=":"
 # Valid: 1 (enabled), 0 (disabled)
 PF_COLOR=1
 
+# Disable colors in output, any value will disable colors.
+# Default: unset
+NO_COLOR=1
+
 # Color of info names:
 # Default: unset (auto)
 # Valid: 0-9
