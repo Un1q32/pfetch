@@ -2308,9 +2308,11 @@ main() {
         ;;
 
         *)
-            printf '%s\n' "${0##*/}     show system information"
-            printf '%s\n' "${0##*/} -d  debug mode"
-            printf '%s\n' "${0##*/} -v  show version"
+            printf '%s' "\
+${0##*/}     show system information
+${0##*/} -d  debug mode
+${0##*/} -v  show version
+"
             return 0
         ;;
     esac
