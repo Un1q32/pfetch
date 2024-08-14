@@ -1611,7 +1611,7 @@ get_ascii() {
 			EOF
         ;;
 
-		CYGWIN*|MSYS*|MINGW*|Windows_NT)
+		CYGWIN*|MSYS*|MINGW*|[Ww]indows*)
 		    read_ascii 4 <<-EOF
 				${c4}######  ######
 				######  ######
@@ -1886,7 +1886,7 @@ get_ascii() {
 				  | ${c7}| _____ ${c2}|
 				  | ${c7}| | | | ${c2}|
 				  | ${c7}| | | | ${c2}|
-				  | ${c7}\\__${c7}___/ ${c2}|
+				  | ${c7}\\_____/ ${c2}|
 				  \\_________/
 			EOF
         ;;
