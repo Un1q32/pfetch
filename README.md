@@ -134,6 +134,9 @@ PF_OS=""
 # Override the value of host
 PF_HOST=""
 
+# Override the value of kernel
+PF_KERNEL=""
+
 # Show/Hide Package Manager names
 # Default: off
 # Valid: on, tiny, off
