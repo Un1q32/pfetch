@@ -28,21 +28,26 @@ picture"!
 - **Linux**
     - Alma Linux, Alpine Linux, Arch Linux, Arco Linux, Artix Linux, AmogOS, CentOS, Dahlia, Debian, Devuan, Elementary, EndeavourOS, EvolutionOS, Fedora, Garuda Linux, Gentoo, Guix, Hyperbola, instantOS, KISS Linux, Linux Lite, Linux Mint, Mageia, Manjaro, MX Linux, NixOS, Nobara, OpenSUSE, Oracle, Parabola, Pop!\_OS, PureOS, Slackware, Solus, SteamOS, Ubuntu, Vanilla OS and Void Linux.
     - All other distributions are supported with a generic penguin logo.
-- **Android**
 - **BSD**
     - DragonflyBSD, FreeBSD, NetBSD and OpenBSD.
 - **Windows**
-    - WSL, Cygwin, MSYS and MinGW.
+    - WSL, Cygwin, MSYS and Busybox w32.
+- **Hurd**
+    - Arch Hurd, Debian
+    - All other distributions are supported with a generic Hurd logo.
+- **Darwin**
+    - macOS
+    - iOS
+    - Probobly all other Darwin based operating systems.
+- **Android**
 - **Haiku**
-- **macOS**
 - **Minix**
 - **Solaris**
 - **IRIX**
 - **SerenityOS**
 - **MorphOS**
-- **Hurd**
-    - Arch Hurd, Debian
-    - All other distributions are supported with a generic Hurd logo.
+- **HP-UX**
+- **Digital UNIX**
 
 ## Configuration
 

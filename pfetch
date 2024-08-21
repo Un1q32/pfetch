@@ -433,6 +433,10 @@ get_os() {
             distro="$os $(freebsd-version)"
         ;;
 
+        (OSF1)
+            distro="Digital UNIX"
+        ;;
+
         (*)
             # Catch all to ensure '$distro' is never blank.
             # This also handles the BSDs.
@@ -1524,46 +1528,46 @@ get_ascii() {
         ([Aa]rtix*)
             read_ascii 6 <<-EOF
 				${c4}      /\\
-				${c4}     /  \\
-				${c4}    /\`'.,\\
-				${c4}   /     ',
-				${c4}  /      ,\`\\
-				${c4} /   ,.'\`.  \\
-				${c4}/.,'\`     \`'.\\
+				     /  \\
+				    /\`'.,\\
+				   /     ',
+				  /      ,\`\\
+				 /   ,.'\`.  \\
+				/.,'\`     \`'.\\
 			EOF
         ;;
 
         ([Bb]edrock*)
             read_ascii 4 <<-EOF
 				${c7}__
-				${c7}\\ \\___
-				${c7} \\  _ \\
-				${c7}  \\___/
+				\\ \\___
+				 \\  _ \\
+				  \\___/
 			EOF
         ;;
 
         ([Aa]mog[Oo][Ss]*)
             read_ascii 4 <<-EOF
 				${c7}      -///:.
-				${c7}     smhhhhmh\`
-				${c7}    :NA${c4}mogO${c7}SNs
-				${c7}    hNNmmmmNNN
-				${c7}    NNNNNNNNNN
-				${c7}   :NNNNNNNNNN
-				${c7}   mNNssussNNN
-				${c7}  sNn:    sNNo
-				${c7}+ooo+     sNNo
-				${c7}        +oooo\`
+				     smhhhhmh\`
+				    :NA${c4}mogO${c7}SNs
+				    hNNmmmmNNN
+				    NNNNNNNNNN
+				   :NNNNNNNNNN
+				   mNNssussNNN
+				  sNn:    sNNo
+				+ooo+     sNNo
+				        +oooo\`
 			EOF
         ;;
 
         ([Bb]uildroot*)
             read_ascii 3 <<-EOF
 				${c3}   ___
-				${c3} / \`   \\
-				${c3}|   :  :|
-				${c3}-. _:__.-
-				${c3}  \` ---- \`
+				 / \`   \\
+				|   :  :|
+				-. _:__.-
+				  \` ---- \`
 			EOF
         ;;
 
@@ -1665,6 +1669,17 @@ get_ascii() {
 				     ${c1}|
 				     |
 				     |
+			EOF
+        ;;
+
+        ([Dd]igital\ [Uu][Nn][Ii][Xx])
+            read_ascii 1 <<-EOF
+				      ${c1}digital
+
+				${c2}|| ||\\\\ ||||\\\\  //
+				|| |||\\\\|||| \\\\//
+				||_||||\\\\||| //\\\\
+				\___/|| \\|||//  \\\\
 			EOF
         ;;
 
@@ -1790,6 +1805,12 @@ get_ascii() {
 			EOF
         ;;
 
+        ([Hh][Pp]-[Uu][Xx]*)
+            read_ascii 4 <<-EOF
+				${c4}hp${c0} UX
+			EOF
+        ;;
+
         ([Hh]ydro[Oo][Ss]*)
 			read_ascii 4 <<-EOF
 				${c1}╔╗╔╗──╔╗───╔═╦══╗
@@ -1814,7 +1835,7 @@ get_ascii() {
 
         ([Ii]glunix*)
             read_ascii <<-EOF
-				${c0}       |
+				       |
 				       |          |
 				                  |
 				  |    ________
@@ -1831,7 +1852,7 @@ get_ascii() {
 
         ([Ii]nstant[Oo][Ss]*)
             read_ascii <<-EOF
-				${c0} ,-''-,
+				 ,-''-,
 				: .''. :
 				: ',,' :
 				 '-____:__
@@ -2057,7 +2078,7 @@ get_ascii() {
 			EOF
         ;;
 
-        [Oo]racle*)
+        ([Oo]racle*)
         read_ascii 1 <<- EOF
 				${c1}     ___________
 				 ./##+++++++++++##\\.
@@ -2254,6 +2275,12 @@ get_ascii() {
                 *\[3?m*)
                     line="${line%%\[3?m*}${line#*\[3?m}"
                 ;;
+                *\[4?m*)
+                    line="${line%%\[4?m*}${line#*\[4?m}"
+                ;;
+                *\[0m*)
+                    line="${line%%\[0m*}${line#*\[0m}"
+                ;;
                 *)
                     break
                 ;;
@@ -2336,9 +2363,12 @@ ${0##*/} -v  show version
     # Disable warning about unused variables.
     # shellcheck disable=2034
     for _c in c1 c2 c3 c4 c5 c6 c7 c8; do
-        esc SGR "3${_c#?}" 0
+        esc SGR "3${_c#?}"
         export "$_c=$e"
     done
+
+    esc SGR 0
+    export c0="$e"
 
     # Disable line wrapping and catch the EXIT signal to enable it again
     # on exit. Ideally you'd somehow query the current value and retain
