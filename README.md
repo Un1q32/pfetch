@@ -31,7 +31,7 @@ picture"!
 - **BSD**
     - DragonflyBSD, FreeBSD, NetBSD and OpenBSD.
 - **Windows**
-    - WSL, Cygwin, MSYS and Busybox w32.
+    - WSL, Cygwin, MSYS and Busybox-w32.
 - **Hurd**
     - Arch Hurd, Debian
     - All other distributions are supported with a generic Hurd logo.

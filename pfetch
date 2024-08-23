@@ -619,6 +619,8 @@ get_uptime() {
             # based on the uptime.
             case $t in
                 (*-*)   d=${t%%-*} t=${t#*-} ;;
+            esac
+            case $t in
                 (*:*:*) h=${t%%:*} t=${t#*:} ;;
             esac
 
@@ -741,6 +743,8 @@ get_pkgs() {
             has snap       && count_pkg snap 0 snap list
             has urpmq      && count_pkg urpmq 0 urpmq --list-media active
             has birb       && count_pkg birb 0 birb --list-installed
+            has nix-store  && count_pkg nix 0 nix_pkg_count
+            has pm         && _p="$(pm list packages)" && count_pkg pm 0 printf '%s\n' "$_p"
 
             # Directories containing packages.
             has kiss       && count_pkg kiss 0 printf '%s\n' /var/db/kiss/installed/*/
@@ -750,9 +754,6 @@ get_pkgs() {
             has emerge     && count_pkg portage 0 printf '%s\n' /var/db/pkg/*/*/
             has pkgtool    && count_pkg pkgtool 0 printf '%s\n' /var/log/packages/*
             has eopkg      && count_pkg eopkg 0 printf '%s\n' /var/lib/eopkg/package/*
-
-            # 'nix' requires two commands.
-            has nix-store  && count_pkg nix 0 nix_pkg_count
         ;;
 
         (CYGWIN*|MSYS*|MINGW*|Windows_NT)
