@@ -610,7 +610,7 @@ get_uptime() {
 			EOF
         ;;
 
-        (IRIX)
+        (IRIX|OSF1)
             # Grab the uptime in a pretty format. Usually,
             # 00:00:00 from the 'ps' command.
             t=$(LC_ALL=POSIX ps -o etime= -p 1)
@@ -744,13 +744,14 @@ get_pkgs() {
             has urpmq      && count_pkg urpmq 0 urpmq --list-media active
             has birb       && count_pkg birb 0 birb --list-installed
             has nix-store  && count_pkg nix 0 nix_pkg_count
-            has pm         && _p="$(pm list packages)" && count_pkg pm 0 printf '%s\n' "$_p"
+            has pm         && _p="$(pm list packages)" &&
+                count_pkg pm 0 printf '%s\n' "$_p"
 
             # Directories containing packages.
             has kiss       && count_pkg kiss 0 printf '%s\n' /var/db/kiss/installed/*/
             has cpt-list   && count_pkg cpt-list 0 printf '%s\n' /var/db/cpt/installed/*/
-            has brew       && count_pkg brew 0 \
-                printf '%s\n' "$(brew --cellar)/"* "$(brew --caskroom)/"*
+            has brew &&
+                count_pkg brew 0 printf '%s\n' "$(brew --cellar)/"* "$(brew --caskroom)/"*
             has emerge     && count_pkg portage 0 printf '%s\n' /var/db/pkg/*/*/
             has pkgtool    && count_pkg pkgtool 0 printf '%s\n' /var/log/packages/*
             has eopkg      && count_pkg eopkg 0 printf '%s\n' /var/lib/eopkg/package/*
@@ -774,8 +775,8 @@ get_pkgs() {
             has dpkg       && count_pkg dpkg 0 dpkg-query -f '.\n' -W
 
             # Directories containing packages.
-            has brew       && count_pkg brew 0 \
-                printf '%s\n' "$(brew --cellar)/"* "$(brew --caskroom)/"*
+            has brew &&
+                count_pkg brew 0 printf '%s\n' "$(brew --cellar)/"* "$(brew --caskroom)/"*
 
             # 'port' prints a single line of output to 'stdout'
             # when no packages are installed and exits with
@@ -1022,13 +1023,11 @@ get_memory() {
 
         (MorphOS)
             while read -r line _ mem_used mem_full _; do
-                case $line in
-                    (total)
-                        mem_used=$(( mem_used / 1024 / 1024))
-                        mem_full=$(( mem_full / 1024 / 1024))
-                        break
-                    ;;
-                esac
+                if [ "$line" = "total" ]; then
+                    mem_used=$(( mem_used / 1024 / 1024))
+                    mem_full=$(( mem_full / 1024 / 1024))
+                    break
+                fi
             done <<-EOF
                 $(avail)
 			EOF
@@ -1073,13 +1072,11 @@ get_memory() {
             #
             # Example output: Memory: 160M max, 147M avail, .....
             while IFS=' :' read -r label mem_full _ mem_free _; do
-                case $label in
-                    (Memory)
-                        mem_full=${mem_full%M}
-                        mem_free=${mem_free%M}
-                        break
-                    ;;
-                esac
+                if [ "$label" = "Memory" ]; then
+                    mem_full=${mem_full%M}
+                    mem_free=${mem_free%M}
+                    break
+                fi
             done <<-EOF
                 $(top -n)
 			EOF
@@ -2275,9 +2272,6 @@ get_ascii() {
             case $line in
                 *\[3?m*)
                     line="${line%%\[3?m*}${line#*\[3?m}"
-                ;;
-                *\[4?m*)
-                    line="${line%%\[4?m*}${line#*\[4?m}"
                 ;;
                 *\[0m*)
                     line="${line%%\[0m*}${line#*\[0m}"
