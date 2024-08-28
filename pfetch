@@ -610,10 +610,14 @@ get_uptime() {
 			EOF
         ;;
 
-        (IRIX|OSF1)
+        (IRIX|OSF1|HP-UX)
             # Grab the uptime in a pretty format. Usually,
             # 00:00:00 from the 'ps' command.
-            t=$(LC_ALL=POSIX ps -o etime= -p 1)
+            if [ "$os" = "HP-UX" ]; then
+                t=$(UNIX95=1 ps -o etime= -p 1)
+            else
+                t=$(LC_ALL=POSIX ps -o etime= -p 1)
+            fi
 
             # Split the pretty output into days or hours
             # based on the uptime.
@@ -1154,13 +1158,19 @@ get_disk() {
 
         # The 'df' command is from IRIX.
         *befhikm*)
-            irix_df=1
+            non_human_df=1
             set -- -P -k
         ;;
 
         # The 'df' command is from OpenBSD.
         *hiklnP*)
             set -- -h
+        ;;
+
+        # The 'df' command is from Digital UNIX
+        *Peikn*)
+            non_human_df=1
+            set -- -k
         ;;
 
         # The 'df' command is from Haiku and is wildly
@@ -1195,18 +1205,28 @@ get_disk() {
     #
     # The next lines are then split to grab the relevant
     # information and thankfully the output remains the
-    # same between all but one 'df' implementation.
+    # same between all but two 'df' implementations.
     {
         read -r _ # discard the first line
         read -r _ full used _ perc _
-
-        if [ -n "$irix_df" ]; then
-            used=$((used / 1024 / 1024))G
-            full=$((full / 1024 / 1024))G
-        fi
     } <<-EOF
 		$(df "$@" "$PF_DISKPATH")
 	EOF
+
+    # IRIX and Digital UNIX don't support human readable output,
+    # so we need to convert the output to human readable format
+    # manually.
+    if [ -n "$non_human_df" ]; then
+        used=$((used / 1024))
+        full=$((full / 1024))
+        if [ $full -gt 8192 ]; then
+            used=$((used / 1024))G
+            full=$((full / 1024))G
+        else
+            used="${used}M"
+            full="${full}M"
+        fi
+    fi
 
     log disk "$used / $full ($perc)" >&6
 }
@@ -1805,7 +1825,14 @@ get_ascii() {
 
         ([Hh][Pp]-[Uu][Xx]*)
             read_ascii 4 <<-EOF
-				${c4}hp${c0} UX
+				  ${c4}____${c7}__${c4}______
+				 /   ${c7}/ /${c4}      \\
+				/   ${c7}/ /_  ____${c4} \\
+				|  ${c7}/ __ \\/ __ \\${c4}|
+				| ${c7}/ / / / /_/ /${c4}|
+				|${c7}/_/ /_/ .___/${c4} |
+				\\     ${c7}/ /${c4}      /
+				 \\___${c7}/_/${c4}______/
 			EOF
         ;;
 
@@ -2273,9 +2300,6 @@ get_ascii() {
                 *\[3?m*)
                     line="${line%%\[3?m*}${line#*\[3?m}"
                 ;;
-                *\[0m*)
-                    line="${line%%\[0m*}${line#*\[0m}"
-                ;;
                 *)
                     break
                 ;;
@@ -2357,13 +2381,10 @@ ${0##*/} -v  show version
     # Generic color list.
     # Disable warning about unused variables.
     # shellcheck disable=2034
-    for _c in c1 c2 c3 c4 c5 c6 c7 c8; do
+    for _c in c0 c1 c2 c3 c4 c5 c6 c7; do
         esc SGR "3${_c#?}"
         export "$_c=$e"
     done
-
-    esc SGR 0
-    export c0="$e"
 
     # Disable line wrapping and catch the EXIT signal to enable it again
     # on exit. Ideally you'd somehow query the current value and retain
