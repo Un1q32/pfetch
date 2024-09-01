@@ -747,9 +747,27 @@ get_pkgs() {
             has snap       && count_pkg snap 0 snap list
             has urpmq      && count_pkg urpmq 0 urpmq --list-media active
             has birb       && count_pkg birb 0 birb --list-installed
+            has click      && count_pkg click 0 click list
+            has pacman-g2  && count_pkg pacman-g2 0 pacman-g2 -Q
+            has lvu        && count_pkg lvu 0 lvu installed
+            has tce-status && count_pkg tce 0 tce-status -i
+            has sorcery    && count_pkg sorcery 0 gaze installed
+            has alps       && count_pkg alps 0 alps showinstalled
+            has butch      && count_pkg butch 0 butch list
+            has swupd      && count_pkg swupd 0 swupd bundle-list --quiet
+            has pisi       && count_pkg pisi 0 pisi li
+            has pacstall   && count_pkg pacstall 0 pacstall -L
+            has bulge      && count_pkg bulge 0 bulge list
+            has evox       && count_pkg evox 0 cat /var/evox/packages/DB
+            has squirrel   && count_pkg squirrel 0 ls -w 1 /var/packages
+            has anise      && count_pkg anise 0 anise s --installed
             has nix-store  && count_pkg nix 0 nix_pkg_count
             has pm         && _p="$(pm list packages)" &&
                 count_pkg pm 0 printf '%s\n' "$_p"
+
+            # 'mine' conflicts with minesweeper games.
+            [ -f /etc/SDE-VERSION ] &&
+                has mine && count_pkg mine 0 mine -q
 
             # Directories containing packages.
             has kiss       && count_pkg kiss 0 printf '%s\n' /var/db/kiss/installed/*/
@@ -759,6 +777,31 @@ get_pkgs() {
             has emerge     && count_pkg portage 0 printf '%s\n' /var/db/pkg/*/*/
             has pkgtool    && count_pkg pkgtool 0 printf '%s\n' /var/log/packages/*
             has eopkg      && count_pkg eopkg 0 printf '%s\n' /var/lib/eopkg/package/*
+
+            has Compile    && count_pkg compile 0 printf '%s\n' /Programs/*/
+            has inary      && count_pkg inary 0 printf '%s\n' /var/lib/inary/package/*
+            has tekel      && count_pkg tekel 0 printf '%s\n' /data/app/"$USER"/* /data/app/system/*
+            has crew       && count_pkg chromebrew 0 printf '%s\n' "${CREW_PREFIX:-/usr/local}"/etc/crew/meta/*.filelist
+            has scratch    && count_pkg scratch 0 printf '%s\n' /var/lib/scratchpkg/db/*
+            has kagami     && count_pkg kagami 0 printf '%s\n' /var/lib/kagami/pkgs/*
+            has cave       && count_pkg cave 0 printf '%s\n' /var/db/paludis/repositories/cross-installed/*/data/*/ /var/db/paludis/repositories/installed/data/*/
+            has hardman    && count_pkg hpkg 0 printf '%s\n' /var/hpkg/packages/*
+
+            # List these last as they accompany regular package managers.
+            has spm        && count_pkg spm 0 spm list -i
+            has puyo       && count_pkg puyo 0 printf '%s\n' ~/.puyo/installed/*
+
+
+            has appimaged  && count_pkg appimage 0 printf '%s\n' "$HOME"/.local/bin/*.[Aa]pp[Ii]mage "$HOME"/Applications/*.[Aa]pp[Ii]mage
+
+            # Has devbox & is initialized
+            has devbox &&
+            case "$(devbox global list)" in
+            *"not activated"*) ;;
+            *)
+                  count_pkg devbox 0 devbox global list
+            ;;
+            esac
         ;;
 
         (CYGWIN*|MSYS*|MINGW*|Windows_NT)
@@ -842,6 +885,11 @@ get_pkgs() {
     # package managers that are on many different systems
     has cargo      && count_pkg cargo 0 cargo_pkg_count
     has pipx       && count_pkg pipx 0 pipx list
+    if has pip; then
+        count_pkg pip 0 pip freeze
+    elif has pip3; then
+        count_pkg pip 0 pip3 freeze
+    fi
 
     if [ $total_pkgs -gt 0 ]; then
         if [ "$PF_PACKAGE_MANAGERS" = "on" ]; then
@@ -1140,15 +1188,22 @@ get_disk() {
     df_version=$(df --version 2>&1)
 
     case $df_version in
-        # The 'df' command from GNU coreutils works with the generic
-        # flags at the bottom of the case statement in most scenarios,
-        # but on Cygwin/MSYS2 the 'source' entry can have spaces if the
-        # Windows path to the Cygwin/MSYS2 installation contains spaces,
-        # breaking the parsing of the 'df' output.
-        # Using the --output flag with a layout that doesn't include the
-        # source path is a workaround for this issue.
         *GNU*)
-            set -- -h --output=fstype,size,used,avail,pcent
+            case $os in
+                # The 'df' command from GNU coreutils works with the generic
+                # flags in most scenarios, but on Cygwin/MSYS2 the 'source' entry
+                # can have spaces if the Windows path to the Cygwin/MSYS2 installation
+                # contains spaces, breaking the parsing of the 'df' output.
+                # Using the --output flag with a layout that doesn't include the
+                # source path is a workaround for this issue.
+                (CYGWIN*|MSYS*|MINGW*|Windows_NT)
+                    set -- -h --output=fstype,size,used,avail,pcent
+                ;;
+
+                (*)
+                    set -- -P -h
+                ;;
+            esac
         ;;
 
         # The 'df' command is from AIX.
@@ -1171,6 +1226,11 @@ get_disk() {
         *Peikn*)
             non_human_df=1
             set -- -k
+        ;;
+
+        # The 'df' command is from NetBSD.
+        *agln*)
+            set -- -h
         ;;
 
         # The 'df' command is from Haiku and is wildly
@@ -2337,7 +2397,7 @@ get_ascii() {
 main() {
     case $* in
         -v|--version)
-            printf '%s 1.3.0\n' "${0##*/}"
+            printf '%s 1.4.0\n' "${0##*/}"
             return 0
         ;;
 
