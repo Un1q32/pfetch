@@ -1233,11 +1233,9 @@ get_disk() {
             set -- -h
         ;;
 
-        # The 'df' command is from Haiku and is wildly
-        # different and provides no workable output,
-        # end here.
+        # The 'df' command is from Haiku.
         *Tracker*)
-            return
+            haiku_df=1
         ;;
 
         # From testing it is safe to assume that
@@ -1252,6 +1250,7 @@ get_disk() {
         case "$distro" in
             iOS*)     PF_DISKPATH="/private/var" ;;
             Android*) PF_DISKPATH="/data"        ;;
+            Haiku*)   PF_DISKPATH="/boot"        ;;
             *)        PF_DISKPATH="/"            ;;
         esac
     fi
@@ -1265,26 +1264,75 @@ get_disk() {
     #
     # The next lines are then split to grab the relevant
     # information and thankfully the output remains the
-    # same between all but two 'df' implementations.
-    {
-        read -r _ # discard the first line
-        read -r _ full used _ perc _
-    } <<-EOF
-		$(df "$@" "$PF_DISKPATH")
-	EOF
+    # same between all but three 'df' implementations.
+    if [ -n "$haiku_df" ]; then
+        while IFS= read -r line; do
+            case $line in
+                (*Total\ Blocks:*)
+                    full=${line##*:}
+                    full=${full#"${full%%[! ]*}"}
+                    fullblocks=${full#*(}
+                    fullblocks=${fullblocks%% *}
+                    full=${full%% (*}
+                ;;
+                (*Free\ Blocks:*)
+                    free=${line##*(}
+                    free=${free%% *}
+                ;;
+            esac
+        done <<-EOF
+			$(df "$PF_DISKPATH")
+		EOF
+
+        usedblocks=$((fullblocks - free))
+
+        # Convert the $used value to human readable format.
+        used=$((usedblocks / 512))
+        if [ $used -gt 1024 ]; then
+            usedi=$((used / 1024))
+            usedf=$((used % 1024 / 100))
+            used="${usedi}.${usedf} GiB"
+        else
+            used="${used} MiB"
+        fi
+
+        perc=$((usedblocks * 100 / fullblocks))%
+    else
+        {
+            read -r _ # discard the first line
+            read -r _ full used _ perc _
+        } <<-EOF
+			$(df "$@" "$PF_DISKPATH")
+		EOF
+    fi
 
     # IRIX and Digital UNIX don't support human readable output,
     # so we need to convert the output to human readable format
     # manually.
     if [ -n "$non_human_df" ]; then
-        used=$((used / 1024))
-        full=$((full / 1024))
-        if [ $full -gt 8192 ]; then
-            used=$((used / 1024))G
-            full=$((full / 1024))G
+        if [ "$used" -gt 1024 ]; then
+            usedi=$((used / 1024))
+            usedf=$((used % 1024 / 100))
+            used="${usedi}.${usedf}M"
+            if [ $usedi -gt 1024 ]; then
+                gusedi=$((usedi / 1024))
+                usedf=$((usedi % 1024 / 100))
+                used="${gusedi}.${usedf}G"
+            fi
         else
-            used="${used}M"
-            full="${full}M"
+            used="${used}K"
+        fi
+        if [ "$full" -gt 1024 ]; then
+            fulli=$((full / 1024))
+            fullf=$((full % 1024 / 100))
+            full="${fulli}.${fullf}M"
+            if [ $fulli -gt 1024 ]; then
+                gfulli=$((fulli / 1024))
+                fullf=$((fulli % 1024 / 100))
+                full="${gfulli}.${fullf}G"
+            fi
+        else
+            full="${full}K"
         fi
     fi
 
