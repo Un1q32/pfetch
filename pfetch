@@ -1590,6 +1590,16 @@ get_ascii() {
     # False positive.
     # shellcheck disable=2154
     case ${1:-${PF_ASCII:-${distro:-$os}}} in
+        [Aa][Ii][Xx])
+            read_ascii 4 <<-EOF
+				${c2}    __    __ _    _
+				   /_ \\   || \\\\  //
+				  //_\ \\  ||  \\\\//
+				 / ___  \\ ||  //\\\\
+				/_/   \\__\\|| //  \\\\
+			EOF
+        ;;
+
         [Aa]lma*)
             read_ascii 3 <<- EOF
 				${c1}    {#@ .,  ${c3} 	,..<.
