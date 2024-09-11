@@ -181,8 +181,18 @@ wmic_read() {
 
 get_title() {
     # Username is retrieved by first checking '$USER' with a fallback
-    # to the 'id -un' command.
-    user=${USER:-$(id -un)}
+    # to the 'id -un' command, then to the 'whoami' command, and finally
+    # to 'unknown'.
+    user="$USER"
+    if [ -z "$user" ]; then
+        if has id; then
+            user=$(id -un)
+        elif has whoami; then
+            user=$(whoami)
+        else
+            user="unknown"
+        fi
+    fi
 
     # Hostname is retrieved by first checking '$HOSTNAME' with a fallback
     # to the 'hostname' command, then to the '/etc/hostname' file, and finally
