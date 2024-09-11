@@ -641,6 +641,9 @@ get_uptime() {
         ;;
     esac
 
+    # End here if the uptime is empty.
+    [ -n "$s" ] || return
+
     # Convert the uptime from seconds into days, hours and minutes.
     d=$((s / 60 / 60 / 24))
     h=$((s / 60 / 60 % 24))
