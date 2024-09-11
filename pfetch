@@ -183,15 +183,14 @@ get_title() {
     # Username is retrieved by first checking '$USER' with a fallback
     # to the 'id -un' command, then to the 'whoami' command, and finally
     # to 'unknown'.
-    user="$USER"
-    if [ -z "$user" ]; then
-        if has id; then
-            user=$(id -un)
-        elif has whoami; then
-            user=$(whoami)
-        else
-            user="unknown"
-        fi
+    if [ -n "$USER" ]; then
+        user="$USER"
+    elif has id; then
+        user=$(id -un)
+    elif has whoami; then
+        user=$(whoami)
+    else
+        user="unknown"
     fi
 
     # Hostname is retrieved by first checking '$HOSTNAME' with a fallback
