@@ -181,8 +181,17 @@ wmic_read() {
 
 get_title() {
     # Username is retrieved by first checking '$USER' with a fallback
-    # to the 'id -un' command.
-    user=${USER:-$(id -un)}
+    # to the 'id -un' command, then to the 'whoami' command, and finally
+    # to 'unknown'.
+    if [ -n "$USER" ]; then
+        user="$USER"
+    elif has id; then
+        user=$(id -un)
+    elif has whoami; then
+        user=$(whoami)
+    else
+        user="unknown"
+    fi
 
     # Hostname is retrieved by first checking '$HOSTNAME' with a fallback
     # to the 'hostname' command, then to the '/etc/hostname' file, and finally
@@ -635,6 +644,9 @@ get_uptime() {
             s=$((${d:-0}*86400 + ${h:-0}*3600 + ${t%%:*}*60 + ${t#*:}))
         ;;
     esac
+
+    # End here if the uptime is empty.
+    [ -n "$s" ] || return
 
     # Convert the uptime from seconds into days, hours and minutes.
     d=$((s / 60 / 60 / 24))
