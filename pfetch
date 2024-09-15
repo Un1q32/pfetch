@@ -945,7 +945,7 @@ get_memory() {
                     read -r _ mem_full mem_used _ # discard the first line
                     read -r _ mem_full mem_used _
                 } <<-EOF
-                    $(free -m)
+					$(free -m)
 				EOF
             fi
         ;;
