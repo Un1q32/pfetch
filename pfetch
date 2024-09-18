@@ -1496,8 +1496,8 @@ get_cpus() {
         cpus=$(nproc)
     else
         case $os in
-            (Darwin*)
-                cpus=$(sysctl -n hw.ncpu)
+            (Darwin*|NetBSD*)
+                cpus=$(/sbin/sysctl -n hw.ncpu)
             ;;
         esac
     fi
