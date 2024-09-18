@@ -59,7 +59,7 @@ picture"!
 # Default: first example below
 # Valid: space separated string, or 'all'
 #
-# OFF by default: shell editor wm de palette disk term resolution
+# OFF by default: shell editor wm de palette disk term resolution cpus
 PF_INFO="ascii title os host kernel uptime pkgs memory"
 
 # Example: Only ASCII.

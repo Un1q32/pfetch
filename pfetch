@@ -1490,6 +1490,21 @@ get_term() {
     log term "${TERMINAL:-$TERM}" >&6
 }
 
+get_cpus() {
+    # Display the number of CPUs.
+    if has nproc; then
+        cpus=$(nproc)
+    else
+        case $os in
+            (Darwin*)
+                cpus=$(sysctl -n hw.ncpu)
+            ;;
+        esac
+    fi
+
+    [ -n "$cpus" ] && log cpus "$cpus" >&6
+}
+
 get_resolution() {
     case $os in
         Linux*|GNU*|*BSD*)
@@ -2531,7 +2546,7 @@ ${0##*/} -v  show version
     # Allow the user to specify the order and inclusion of information
     # functions through the 'PF_INFO' environment variable.
     [ "$PF_INFO" = "all" ] &&
-        PF_INFO="ascii title os host kernel uptime pkgs memory disk wm de shell editor term resolution palette"
+        PF_INFO="ascii title os host kernel uptime pkgs memory disk wm de shell editor term resolution cpus palette"
     # shellcheck disable=2086
     {
         # Disable globbing and set the positional parameters to the
