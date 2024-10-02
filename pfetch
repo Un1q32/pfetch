@@ -1278,12 +1278,12 @@ get_disk() {
                 (*Total\ Blocks:*)
                     full=${line##*:}
                     full=${full#"${full%%[! ]*}"}
-                    fullblocks=${full#*(}
+                    fullblocks=${full#*\(}
                     fullblocks=${fullblocks%% *}
-                    full=${full%% (*}
+                    full=${full%% \(*}
                 ;;
                 (*Free\ Blocks:*)
-                    free=${line##*(}
+                    free=${line##*\(}
                     free=${free%% *}
                 ;;
             esac
