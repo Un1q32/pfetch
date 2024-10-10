@@ -113,6 +113,12 @@ PF_ALIGN=""
 # Valid: string
 PF_ASCII="openbsd"
 
+# When this is set to the path of a file,
+# that file will be used as ascii art
+# Default: unset (unused)
+# Valid: file path
+PF_CUSTOM_ASCII="/path/to/file"
+
 # The below environment variables control more
 # than just 'pfetch' and can be passed using
 # 'HOSTNAME=cool_pc pfetch' to restrict their
