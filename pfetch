@@ -1603,8 +1603,8 @@ get_ascii() {
         done
     }
 
-    if [ -f "$PF_CUSTOM_ASCII_FILE" ]; then
-        read_ascii < "$PF_CUSTOM_ASCII_FILE"
+    if [ -f "$PF_CUSTOM_ASCII" ]; then
+        read_ascii < "$PF_CUSTOM_ASCII"
     else
         # This checks for ascii art in the following order:
         # '$1':        Argument given to 'get_ascii()' directly.
