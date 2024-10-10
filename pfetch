@@ -1604,7 +1604,7 @@ get_ascii() {
     }
 
     if [ "$PF_ASCII" = "custom" ] && [ -n "$PF_CUSTOM_ASCII_FILE" ]; then
-        read_ascii "$PF_CUSTOM_ASCII_COLOR" < "$PF_CUSTOM_ASCII_FILE"
+        read_ascii < "$PF_CUSTOM_ASCII_FILE"
     else
         # This checks for ascii art in the following order:
         # '$1':        Argument given to 'get_ascii()' directly.
