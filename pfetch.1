@@ -1,0 +1,68 @@
+.TH PFETCH 1
+.SH NAME
+pfetch \- A pretty system information tool written in POSIX sh
+.SH SYNOPSIS
+.B pfetch
+.RI [option]
+.SH DESCRIPTION
+.B pfetch
+A pretty system information tool written in POSIX sh.
+.SH OPTIONS
+.TP
+.BR \-d,\ --debug
+Debug information
+.TP
+.BR \-v,\ --version
+Prints out pfetch version
+.SH CONFIGURATION
+.B pfetch
+is configured through environment variables
+.TP
+.BR PF_INFO
+Which information to display. If 'ascii' will be used, it must come first.
+.TP
+.BR PF_SOURCE
+A file to source before running pfetch.
+.TP
+.BR PF_SEP
+Separator between info name and info data.
+.TP
+.BR PF_COLOR
+Enable/Disable colors in output: 1 (true), 0 (false)
+.TP
+.BR PF_COL1
+Color of info names: Valid: 0-9
+.TP
+.BR PF_COL2
+Color of info data: Valid: 0-9
+.TP
+.BR PF_COL3
+Color of title data: Valid: 0-9
+.TP
+.BR PF_ALIGN
+Alignment padding.
+.TP
+.BR PF_ASCII
+Which ascii art to use.
+.TP
+.BR PF_CUSTOM_ASCII
+When this is set to the path of a file, that file will be used as ascii art
+.TP
+.BR PF_OS
+Override the value of os
+.TP
+.BR PF_HOST
+Override the value of host
+.TP
+.BR PF_KERNEL
+Override the value of kernel
+.TP
+.BR PF_PACKAGE_MANAGERS
+Show/Hide Package Manager names: Valid: on, tiny, off
+.TP
+.BR PF_DISABLED_PACKAGE_MANAGERS
+Disable individial package managers
+.TP
+.BR PF_DISKPATH
+Mount point of the disk used for disk info
+.TP

@@ -162,8 +162,8 @@ PF_PACKAGE_MANAGERS="on"
 # Valid: package manager name (first arguement passed to the count_pkg function)
 PF_DISABLED_PACKAGE_MANAGERS=""
 
-# Mount point for the disk you want to display in disk info
-# Default: '/' (except on iOS where it is /private/var, and on Android where it is /data)
+# Mount point of the disk used for disk info
+# Default: Usually '/', but can vary on some operating systems.
 # Valid: string
 PF_DISKPATH="/"
 ```
