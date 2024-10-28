@@ -157,7 +157,7 @@ PF_KERNEL=""
 # off:  '1759'
 PF_PACKAGE_MANAGERS="on"
 
-# Disable individial package managers
+# Disable individual package managers
 # Default: unset (none)
 # Valid: package manager name (first arguement passed to the count_pkg function)
 PF_DISABLED_PACKAGE_MANAGERS=""
