@@ -2506,6 +2506,12 @@ ${0##*/} -v  show version
         ;;
     esac
 
+    # Fail if uname is unavailible.
+    if ! has uname; then
+        printf 'Missing dependency: uname\n'
+        exit 1
+    fi
+
     # Hide 'stdout' and selectively print to it using '>&6'.
     # This gives full control over what it displayed on the screen.
     exec 6>&1 >/dev/null
