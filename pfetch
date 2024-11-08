@@ -1496,7 +1496,7 @@ get_cpus() {
         cpus=$(nproc)
     else
         case $os in
-            (Darwin*|FreeBSD*|DragonFly*)
+            (Darwin*|FreeBSD*|DragonFly*|OpenBSD*)
                 cpus=$(sysctl -n hw.ncpu)
             ;;
 
