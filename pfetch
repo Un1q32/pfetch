@@ -890,12 +890,14 @@ get_pkgs() {
     esac
 
     # package managers that are on many different systems
-    has cargo      && count_pkg cargo 0 cargo_pkg_count
-    has pipx       && count_pkg pipx 0 pipx list
-    if has pip; then
-        count_pkg pip 0 pip freeze
-    elif has pip3; then
-        count_pkg pip 0 pip3 freeze
+    has cargo && count_pkg cargo 0 cargo_pkg_count
+    if [ -n "$PF_ENABLE_SLOW_PACKAGE_MANAGERS" ]; then
+        has pipx && count_pkg pipx 0 pipx list
+        if has pip; then
+            count_pkg pip 0 pip freeze
+        elif has pip3; then
+            count_pkg pip 0 pip3 freeze
+        fi
     fi
 
     if [ $total_pkgs -gt 0 ]; then
