@@ -162,7 +162,7 @@ PF_PACKAGE_MANAGERS="on"
 # Valid: package manager name (first arguement passed to the count_pkg function)
 PF_DISABLED_PACKAGE_MANAGERS=""
 
-# Enable slow package managers that are disabled by default.
+# Enable slower package managers that are disabled by default.
 # You can enable only certain package managers by setting this
 # and adding unwanted package managers to PF_DISABLED_PACKAGE_MANAGERS.
 # Default: unset
