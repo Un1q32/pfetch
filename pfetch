@@ -690,9 +690,9 @@ serenity_pkg_count() {
 count_pkg() {
     # This function is used to count the number of packages installed
     # from each individual package manager.
-    # The first arguement is the name of the package manager. The second
-    # arguement is a number to subtract from the total count of packages.
-    # The other arguements are the command to list the packages.
+    # The first argument is the name of the package manager. The second
+    # argument is a number to subtract from the total count of packages.
+    # The other arguments are the command to list the packages.
     pkgmgr="$1"
     # check the name against the list of disabled package managers
     for disabled in $PF_DISABLED_PACKAGE_MANAGERS; do
