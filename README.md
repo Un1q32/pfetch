@@ -49,6 +49,15 @@ picture"!
 - **HP-UX**
 - **Digital UNIX**
 
+## Installing
+We would install pfetch by makefile.
+You would need Git and Make
+
+```sh
+git clone https://github.com/Un1q32/pfetch.git
+cd pfetch
+sudo make install
+```
 ## Configuration
 
 `pfetch` is configured through environment variables.
