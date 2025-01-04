@@ -38,7 +38,7 @@ picture"!
 - **Darwin**
     - macOS
     - iOS
-    - Probobly all other Darwin based operating systems.
+    - Probably all other Darwin based operating systems.
 - **Android**
 - **Haiku**
 - **Minix**
