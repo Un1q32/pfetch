@@ -1514,7 +1514,7 @@ get_cpus() {
 get_resolution() {
     case $os in
         Linux*|GNU*|*BSD*)
-            if [ -n "$DISPLAY" ]; then
+            if [ -n "$DISPLAY" ] && has grep; then
                 if has xdpyinfo; then
                     resolution=$(xdpyinfo | grep 'dimensions')
                     resolution="${resolution#*dimensions:}"
