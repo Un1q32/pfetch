@@ -744,7 +744,7 @@ get_pkgs() {
             has crux       && count_pkg pkginfo 0 pkginfo -i
             has pacman-key && count_pkg pacman 0 pacman -Qq
             has dpkg       && count_pkg dpkg 0 dpkg-query -f '.\n' -W
-            has rpm        && count_pkg rpm 0 rpm -qa
+            has rpm        && count_pkg rpm 0 rpm -qa --nodigest --nosignature
             has xbps-query && count_pkg xbps 0 xbps-query -l
             has apk        && count_pkg apk 0 apk_pkg_count
             has guix       && count_pkg guix 0 guix package --list-installed
