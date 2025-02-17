@@ -207,6 +207,10 @@ get_title() {
             hostname="unknown"
         fi
     fi
+    # Remove domain name from hostname on Darwin and BSD
+    case $os in
+        Darwin*|*BSD*) hostname="${hostname%.*}" ;;
+    esac
 
     # Add escape sequences for coloring to user and host name unless $PF_COL3=COL1. As we embed
     # them directly in the arguments passed to log(), we cannot use esc_p().
