@@ -822,7 +822,7 @@ get_pkgs() {
                 scoopbin=$(command -v scoop)
                 count_pkg scoop 1 printf '%s\n' "${scoopbin%/*}"/../apps/*
             }
-            has winget     && count_pkg winget 0 winget list
+            has winget     && count_pkg winget 2 winget list
             has choco      && count_pkg chocolatey 2 choco list
             has pacman-key && count_pkg pacman 0 pacman -Qq
         ;;
