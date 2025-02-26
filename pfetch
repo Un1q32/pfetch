@@ -497,16 +497,12 @@ get_host() {
             host="$name $version $model"
         ;;
 
-        (Darwin*|FreeBSD*|DragonFly*)
+        (Darwin*|FreeBSD*|DragonFly*|NetBSD*)
             # '$arch' is the cached output from 'uname -m'.
             case $distro in
                 iOS*) host=$arch                 ;;
                 *)    host=$(sysctl -n hw.model) ;;
             esac
-        ;;
-
-        (NetBSD*)
-            host=$(/sbin/sysctl -n hw.model)
         ;;
 
         (OpenBSD*)
@@ -1043,7 +1039,7 @@ get_memory() {
         ;;
 
         (NetBSD*)
-            mem_full=$(($(/sbin/sysctl -n hw.physmem64) / 1024 / 1024))
+            mem_full=$(($(sysctl -n hw.physmem64) / 1024 / 1024))
 
             # NetBSD implements a lot of the Linux '/proc' filesystem,
             # this uses the same parser as the Linux memory detection.
@@ -1502,12 +1498,8 @@ get_cpus() {
         cpus=$(nproc)
     else
         case $os in
-            (Darwin*|FreeBSD*|DragonFly*|OpenBSD*)
+            (Darwin*|FreeBSD*|DragonFly*|OpenBSD*|NetBSD*)
                 cpus=$(sysctl -n hw.ncpu)
-            ;;
-
-            (NetBSD*)
-                cpus=$(/sbin/sysctl -n hw.ncpu)
             ;;
         esac
     fi
@@ -2511,6 +2503,8 @@ ${0##*/} -v  show version
             return 0
         ;;
     esac
+
+    export PATH="$PATH:/usr/sbin:/sbin"
 
     # Fail if uname is unavailable.
     if ! has uname; then
