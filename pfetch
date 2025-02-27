@@ -840,16 +840,30 @@ get_pkgs() {
             # 'port' should really exit with a non-zero code
             # in this case to allow scripts to cleanly handle
             # this behavior.
-            has port       && {
-                pkg_list=$(port installed 2>/dev/null)
+            #
+            # We check that macports isn't in the list
+            # of disabled package managers here
+            # because otherwise the 'port installed' command
+            # would get run even when disabled.
+            #
+            # 'port installed' can take a long time to run
+            # (about a full second on my 2006 machine)
+            # so checking can save a lot of time.
+            has port && {
+                case $PF_DISABLED_PACKAGE_MANAGERS in
+                    *macports*) ;;
+                    *)
+                        pkg_list=$(port installed 2>/dev/null)
 
-                case "$pkg_list" in
-                    ("No ports are installed.")
-                        # do nothing
-                    ;;
+                        case "$pkg_list" in
+                            ("No ports are installed.")
+                                # do nothing
+                            ;;
 
-                    (*)
-                        count_pkg macports 0 printf '%s' "$pkg_list"
+                            (*)
+                                count_pkg macports 0 printf '%s' "$pkg_list"
+                            ;;
+                        esac
                     ;;
                 esac
             }
