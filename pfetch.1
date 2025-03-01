@@ -19,9 +19,11 @@ Prints out pfetch version
 is configured through environment variables
 .TP
 .BR PF_INFO
-Which information to display. If 'ascii' will be used, it must come first.
-Valid: all, ascii, title, os, host, kernel, uptime, pkgs, memory,
-shell, editor, wm, de, palette, disk, term, resolution, cpus
+A space separated list of which information to display.
+If 'ascii' will be used, it must come first.
+If 'all' will be used it must be the only option.
+
+Options: all, ascii, title, os, host, kernel, uptime, pkgs, memory, shell, editor, wm, de, palette, disk, term, resolution, cpus
 .TP
 .BR PF_SOURCE
 A file to source before running pfetch.
