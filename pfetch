@@ -2496,7 +2496,7 @@ get_ascii() {
 main() {
     case $* in
         -v|--version)
-            printf '%s 1.7.1\n' "${0##*/}"
+            printf '%s 1.8.1\n' "${0##*/}"
             return 0
         ;;
 
