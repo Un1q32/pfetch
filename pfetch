@@ -687,6 +687,10 @@ serenity_pkg_count() {
     done < /usr/Ports/packages.db
 }
 
+macports_pkg_count() {
+    port installed 2>/dev/null | grep active
+}
+
 count_pkg() {
     # This function is used to count the number of packages installed
     # from each individual package manager.
@@ -827,46 +831,11 @@ get_pkgs() {
             # Commands which print packages one per line.
             has pkgin      && count_pkg pkgin 0 pkgin list
             has dpkg       && count_pkg dpkg 0 dpkg-query -f '.\n' -W
+            has port       && count_pkg macports 0 macports_pkg_count
 
             # Directories containing packages.
             has brew &&
                 count_pkg brew 0 printf '%s\n' "$(brew --cellar)/"* "$(brew --caskroom)/"*
-
-            # 'port' prints a single line of output to 'stdout'
-            # when no packages are installed and exits with
-            # success causing a false-positive of 1 package
-            # installed.
-            #
-            # 'port' should really exit with a non-zero code
-            # in this case to allow scripts to cleanly handle
-            # this behavior.
-            #
-            # We check that macports isn't in the list
-            # of disabled package managers here
-            # because otherwise the 'port installed' command
-            # would get run even when disabled.
-            #
-            # 'port installed' can take a long time to run
-            # (about a full second on my 2006 machine)
-            # so checking can save a lot of time.
-            has port && {
-                case $PF_DISABLED_PACKAGE_MANAGERS in
-                    *macports*) ;;
-                    *)
-                        pkg_list=$(port installed 2>/dev/null)
-
-                        case "$pkg_list" in
-                            ("No ports are installed.")
-                                # do nothing
-                            ;;
-
-                            (*)
-                                count_pkg macports 0 printf '%s' "$pkg_list"
-                            ;;
-                        esac
-                    ;;
-                esac
-            }
         ;;
 
         (FreeBSD*|DragonFly*)
