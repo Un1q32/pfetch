@@ -26,7 +26,7 @@ picture"!
 ## OS support
 
 - **Linux**
-    - Alma Linux, Alpine Linux, Arch Linux, Arco Linux, Artix Linux, AmogOS, CentOS, Dahlia, Debian, Devuan, Elementary, EndeavourOS, EvolutionOS, Fedora, Garuda Linux, Gentoo, Guix, Hyperbola, instantOS, KISS Linux, Linux Lite, Linux Mint, Mageia, Manjaro, MX Linux, NixOS, Nobara, OpenSUSE, Oracle, Parabola, Pop!\_OS, PureOS, Slackware, Solus, SteamOS, Ubuntu, Vanilla OS and Void Linux.
+    - Alma Linux, Alpine Linux, Arch Linux, Arco Linux, Artix Linux, AmogOS, CentOS, Dahlia, Debian, Devuan, Elementary, EndeavourOS, EvolutionOS, Fedora, Garuda Linux, Gentoo, Guix, Hyperbola, instantOS, Kali Linux, KISS Linux, Linux Lite, Linux Mint, Mageia, Manjaro, MX Linux, NixOS, Nobara, OpenSUSE, Oracle, Parabola, Pop!\_OS, PureOS, Slackware, Solus, SteamOS, Ubuntu, Vanilla OS and Void Linux.
     - All other distributions are supported with a generic penguin logo.
 - **BSD**
     - DragonflyBSD, FreeBSD, NetBSD and OpenBSD.
