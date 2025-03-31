@@ -445,6 +445,10 @@ get_os() {
             distro="Digital UNIX"
         ;;
 
+        (dgux)
+            distro="DG/UX"
+        ;;
+
         (*)
             # Catch all to ensure '$distro' is never blank.
             # This also handles the BSDs.
