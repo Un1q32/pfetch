@@ -778,6 +778,7 @@ get_pkgs() {
             has anise      && count_pkg anise 0 anise s --installed
             has nix-store  && count_pkg nix 0 nix_pkg_count
             has winget.exe && count_pkg winget 2 winget.exe list
+            has choco.exe  && count_pkg chocolatey 2 choco.exe list
             has pm         && _p="$(pm list packages)" &&
                 count_pkg pm 0 printf '%s\n' "$_p"
 
