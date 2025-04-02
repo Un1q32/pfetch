@@ -47,6 +47,7 @@ picture"!
 - **SerenityOS**
 - **MorphOS**
 - **HP-UX**
+- **DG/UX**
 - **Digital UNIX**
 
 ## Configuration
