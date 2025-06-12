@@ -1,0 +1,12 @@
+name: check
+
+on:
+  push:
+    branches: [ 'master' ]
+
+jobs:
+  check:
+    steps:
+      - uses: actions/checkout@v4
+      - name: check
+        run: make check
