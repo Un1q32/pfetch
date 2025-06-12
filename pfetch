@@ -2519,7 +2519,6 @@ ${0##*/} -v  show version
             return 0
         ;;
     esac
-    true $notset
 
     export PATH="$PATH:/usr/sbin:/sbin"
 
