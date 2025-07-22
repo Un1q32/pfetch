@@ -273,7 +273,7 @@ get_os() {
             # Android detection works by checking for the existence of
             # the following two directories. I don't think there's a simpler
             # method than this.
-            elif [ -d /system/app ] && [ -d /system/priv-app ] && has getprop; then
+            elif [ -d /system/app ] && has getprop; then
                 distro="Android $(getprop ro.build.version.release)"
 
             elif [ -f /etc/os-release ]; then
