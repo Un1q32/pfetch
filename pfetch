@@ -799,16 +799,20 @@ get_pkgs() {
             has Compile    && count_pkg compile 0 printf '%s\n' /Programs/*/
             has inary      && count_pkg inary 0 printf '%s\n' /var/lib/inary/package/*
             has tekel      && count_pkg tekel 0 printf '%s\n' /data/app/"$USER"/* /data/app/system/*
-            has crew       && count_pkg chromebrew 0 printf '%s\n' "${CREW_PREFIX:-/usr/local}"/etc/crew/meta/*.filelist
+            has crew       && count_pkg chromebrew 0 printf '%s\n' \
+                "${CREW_PREFIX:-/usr/local}"/etc/crew/meta/*.filelist
             has scratch    && count_pkg scratch 0 printf '%s\n' /var/lib/scratchpkg/db/*
             has kagami     && count_pkg kagami 0 printf '%s\n' /var/lib/kagami/pkgs/*
-            has cave       && count_pkg cave 0 printf '%s\n' /var/db/paludis/repositories/cross-installed/*/data/*/ /var/db/paludis/repositories/installed/data/*/
+            has cave       && count_pkg cave 0 printf '%s\n' \
+                /var/db/paludis/repositories/cross-installed/*/data/*/ \
+                /var/db/paludis/repositories/installed/data/*/
             has hardman    && count_pkg hpkg 0 printf '%s\n' /var/hpkg/packages/*
 
             # List these last as they accompany regular package managers.
             has spm        && count_pkg spm 0 spm list -i
             has puyo       && count_pkg puyo 0 printf '%s\n' ~/.puyo/installed/*
 
+            [ -d /var/packages ] && count_pkg dsm 0 printf '%s\n' /var/packages/*
 
             has appimaged  && count_pkg appimage 0 printf '%s\n' "$HOME"/.local/bin/*.[Aa]pp[Ii]mage "$HOME"/Applications/*.[Aa]pp[Ii]mage
 
