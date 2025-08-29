@@ -811,6 +811,7 @@ get_pkgs() {
             # List these last as they accompany regular package managers.
             has spm        && count_pkg spm 0 spm list -i
             has puyo       && count_pkg puyo 0 printf '%s\n' ~/.puyo/installed/*
+            has qi         && count_pkg qi 0 printf '%s\n' /usr/pkg/* 
 
             [ -d /var/packages ] && count_pkg dsm 0 printf '%s\n' /var/packages/*
 
