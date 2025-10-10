@@ -379,8 +379,10 @@ get_os() {
 
             # Use the ProductVersion to determine which macOS/OS X codename
             # the system has. As far as I'm aware there's no "dynamic" way
-            # of grabbing this information.
+            # of grabbing this information. iOS 1 is here because iOS didn't
+            # internally differatiate itself from OS X before 2.0
             case $mac_version in
+                (1.*)    distro="iOS $mac_version"                   ;;
                 (10.4*)  distro="Mac OS X $mac_version Tiger"        ;;
                 (10.5*)  distro="Mac OS X $mac_version Leopard"      ;;
                 (10.6*)  distro="Mac OS X $mac_version Snow Leopard" ;;
