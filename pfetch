@@ -2437,6 +2437,17 @@ get_ascii() {
 				EOF
             ;;
 
+            ([Rr]edox*)
+                read_ascii 1 <<-EOF
+					${c1}           &   &
+					   _________&_&
+					 ~/  \  /  c  -\\
+					/ |  /  \   \   \\
+					  |    __    \__.
+					  |_!_|  |_!_|
+				EOF
+            ;;
+
             (*)
                 # On no match of a distribution ascii art, this function calls
                 # itself again, this time to look for a more generic OS related
