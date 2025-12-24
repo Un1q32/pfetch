@@ -452,6 +452,10 @@ get_os() {
             distro="DG/UX"
         ;;
 
+        (Redox)
+            distro="Redox OS"
+        ;;
+
         (*)
             # Catch all to ensure '$distro' is never blank.
             # This also handles the BSDs.
