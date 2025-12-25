@@ -49,6 +49,7 @@ picture"!
 - **HP-UX**
 - **DG/UX**
 - **Digital UNIX**
+- **Redox OS**
 
 ## Configuration
 
