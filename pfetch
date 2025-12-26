@@ -711,6 +711,17 @@ macports_pkg_count() {
     port installed 2>/dev/null | grep active
 }
 
+homebrew_pkg_count() {
+    cellar="$(brew --cellar)"
+    caskroom="$(brew --caskroom)"
+    if ! [ "$(printf '%s\n' "$cellar"/*)" = "$cellar/*" ]; then
+        printf '%s\n' "$cellar"/*
+    fi
+    if ! [ "$(printf '%s\n' "$caskroom"/*)" = "$caskroom/*" ]; then
+        printf '%s\n' "$caskroom"/*
+    fi
+}
+
 count_pkg() {
     # This function is used to count the number of packages installed
     # from each individual package manager.
@@ -805,8 +816,7 @@ get_pkgs() {
             # Directories containing packages.
             has kiss       && count_pkg kiss 0 printf '%s\n' /var/db/kiss/installed/*/
             has cpt-list   && count_pkg cpt-list 0 printf '%s\n' /var/db/cpt/installed/*/
-            has brew &&
-                count_pkg brew 0 printf '%s\n' "$(brew --cellar)/"* "$(brew --caskroom)/"*
+            has brew       && count_pkg brew 0 homebrew_pkg_count
             has emerge     && count_pkg portage 0 printf '%s\n' /var/db/pkg/*/*/
             has pkgtool    && count_pkg pkgtool 0 printf '%s\n' /var/log/packages/*
             has eopkg      && count_pkg eopkg 0 printf '%s\n' /var/lib/eopkg/package/*
@@ -830,7 +840,8 @@ get_pkgs() {
 
             [ -d /var/packages ] && count_pkg dsm 0 printf '%s\n' /var/packages/*
 
-            has appimaged  && count_pkg appimage 0 printf '%s\n' "$HOME"/.local/bin/*.[Aa]pp[Ii]mage "$HOME"/Applications/*.[Aa]pp[Ii]mage
+            has appimaged &&
+                count_pkg appimage 0 printf '%s\n' "$HOME"/.local/bin/*.[Aa]pp[Ii]mage "$HOME"/Applications/*.[Aa]pp[Ii]mage
 
             # Has devbox & is initialized
             has devbox &&
@@ -860,8 +871,7 @@ get_pkgs() {
             has port       && count_pkg macports 0 macports_pkg_count
 
             # Directories containing packages.
-            has brew &&
-                count_pkg brew 0 printf '%s\n' "$(brew --cellar)/"* "$(brew --caskroom)/"*
+            has brew       && count_pkg brew 0 homebrew_pkg_count
         ;;
 
         (FreeBSD*|DragonFly*)
