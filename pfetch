@@ -722,6 +722,16 @@ homebrew_pkg_count() {
     fi
 }
 
+redox_pkg_count() {
+    while IFS= read -r line; do
+        case $line in
+            (*PackageName*) printf '\n' ;;
+        esac
+    done <<- EOF
+		$(pkg list)
+	EOF
+}
+
 count_pkg() {
     # This function is used to count the number of packages installed
     # from each individual package manager.
@@ -905,6 +915,10 @@ get_pkgs() {
 
         (SerenityOS)
             count_pkg SerenityOS 0 serenity_pkg_count
+        ;;
+
+        (Redox)
+            count_pkg Redox 0 redox_pkg_count
         ;;
     esac
 
