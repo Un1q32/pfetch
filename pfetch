@@ -1475,16 +1475,17 @@ get_wm() {
                     # don't set '_NET_WM_NAME'.
                     while read -r ps_line; do
                         case $ps_line in
-                            (*catwm*)     wm=catwm          ;;
-                            (*fvwm*)      wm=fvwm           ;;
-                            (*dwm*)       wm=dwm            ;;
-                            (*2bwm*)      wm=2bwm           ;;
-                            (*monsterwm*) wm=monsterwm      ;;
-                            (*wmaker*)    wm='Window Maker' ;;
-                            (*sowm*)      wm=sowm           ;;
-                            (*penrose*)   wm=penrose        ;;
-                            (*Hyprland*)  wm=Hyprland       ;;
+                            (*catwm*)     _found=1 wm=catwm          ;;
+                            (*fvwm*)      _found=1 wm=fvwm           ;;
+                            (*dwm*)       _found=1 wm=dwm            ;;
+                            (*2bwm*)      _found=1 wm=2bwm           ;;
+                            (*monsterwm*) _found=1 wm=monsterwm      ;;
+                            (*wmaker*)    _found=1 wm='Window Maker' ;;
+                            (*sowm*)      _found=1 wm=sowm           ;;
+                            (*penrose*)   _found=1 wm=penrose        ;;
+                            (*Hyprland*)  _found=1 wm=Hyprland       ;;
                         esac
+                        [ -n "$_found" ] && break;
                     done <<-EOF
                         $(ps x)
 					EOF
