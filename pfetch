@@ -711,17 +711,6 @@ macports_pkg_count() {
     port installed 2>/dev/null | grep active
 }
 
-homebrew_pkg_count() {
-    cellar="$(brew --cellar)"
-    caskroom="$(brew --caskroom)"
-    if ! [ "$(printf '%s\n' "$cellar"/*)" = "$cellar/*" ]; then
-        printf '%s\n' "$cellar"/*
-    fi
-    if ! [ "$(printf '%s\n' "$caskroom"/*)" = "$caskroom/*" ]; then
-        printf '%s\n' "$caskroom"/*
-    fi
-}
-
 redox_pkg_count() {
     while IFS= read -r line; do
         case $line in
@@ -730,6 +719,16 @@ redox_pkg_count() {
     done <<- EOF
 		$(pkg list)
 	EOF
+}
+
+glob() {
+    for glob in "$@"; do
+        result="$(eval printf '%s\\n' "$glob")"
+        case $result in
+            (*\**) return ;;
+        esac
+        eval printf '%s\\n' "$glob"
+    done
 }
 
 count_pkg() {
@@ -824,34 +823,34 @@ get_pkgs() {
                 has mine && count_pkg mine 0 mine -q
 
             # Directories containing packages.
-            has kiss       && count_pkg kiss 0 printf '%s\n' /var/db/kiss/installed/*/
-            has cpt-list   && count_pkg cpt-list 0 printf '%s\n' /var/db/cpt/installed/*/
-            has brew       && count_pkg brew 0 homebrew_pkg_count
-            has emerge     && count_pkg portage 0 printf '%s\n' /var/db/pkg/*/*/
-            has pkgtool    && count_pkg pkgtool 0 printf '%s\n' /var/log/packages/*
-            has eopkg      && count_pkg eopkg 0 printf '%s\n' /var/lib/eopkg/package/*
+            has kiss       && count_pkg kiss 0 glob '/var/db/kiss/installed/*/'
+            has cpt-list   && count_pkg cpt-list 0 glob '/var/db/cpt/installed/*/'
+            has brew       && count_pkg brew 0 glob "$(brew --cellar)/*" "$(brew --caskroom)/*"
+            has emerge     && count_pkg portage 0 glob '/var/db/pkg/*/*/'
+            has pkgtool    && count_pkg pkgtool 0 glob '/var/log/packages/*'
+            has eopkg      && count_pkg eopkg 0 glob '/var/lib/eopkg/package/*'
 
-            has Compile    && count_pkg compile 0 printf '%s\n' /Programs/*/
-            has inary      && count_pkg inary 0 printf '%s\n' /var/lib/inary/package/*
-            has tekel      && count_pkg tekel 0 printf '%s\n' /data/app/"$USER"/* /data/app/system/*
-            has crew       && count_pkg chromebrew 0 printf '%s\n' \
-                "${CREW_PREFIX:-/usr/local}"/etc/crew/meta/*.filelist
-            has scratch    && count_pkg scratch 0 printf '%s\n' /var/lib/scratchpkg/db/*
-            has kagami     && count_pkg kagami 0 printf '%s\n' /var/lib/kagami/pkgs/*
-            has cave       && count_pkg cave 0 printf '%s\n' \
-                /var/db/paludis/repositories/cross-installed/*/data/*/ \
-                /var/db/paludis/repositories/installed/data/*/
-            has hardman    && count_pkg hpkg 0 printf '%s\n' /var/hpkg/packages/*
+            has Compile    && count_pkg compile 0 glob '/Programs/*/'
+            has inary      && count_pkg inary 0 glob '/var/lib/inary/package/*'
+            has tekel      && count_pkg tekel 0 glob "/data/app/$USER/*" '/data/app/system/*'
+            has crew       && count_pkg chromebrew 0 glob \
+                "${CREW_PREFIX:-/usr/local}/etc/crew/meta/*.filelist"
+            has scratch    && count_pkg scratch 0 glob '/var/lib/scratchpkg/db/*'
+            has kagami     && count_pkg kagami 0 glob '/var/lib/kagami/pkgs/*'
+            has cave       && count_pkg cave 0 glob \
+                '/var/db/paludis/repositories/cross-installed/*/data/*/' \
+                '/var/db/paludis/repositories/installed/data/*/'
+            has hardman    && count_pkg hpkg 0 glob '/var/hpkg/packages/*'
 
             # List these last as they accompany regular package managers.
             has spm        && count_pkg spm 0 spm list -i
-            has puyo       && count_pkg puyo 0 printf '%s\n' ~/.puyo/installed/*
-            has qi         && count_pkg qi 0 printf '%s\n' /usr/pkg/* 
+            has puyo       && count_pkg puyo 0 glob "$HOME/.puyo/installed/*"
+            has qi         && count_pkg qi 0 glob '/usr/pkg/*'
 
-            [ -d /var/packages ] && count_pkg dsm 0 printf '%s\n' /var/packages/*
+            [ -d /var/packages ] && count_pkg dsm 0 glob '/var/packages/*'
 
             has appimaged &&
-                count_pkg appimage 0 printf '%s\n' "$HOME"/.local/bin/*.[Aa]pp[Ii]mage "$HOME"/Applications/*.[Aa]pp[Ii]mage
+                count_pkg appimage 0 glob "$HOME/.local/bin/*.[Aa]pp[Ii]mage" "$HOME/Applications/*.[Aa]pp[Ii]mage"
 
             # Has devbox & is initialized
             has devbox &&
@@ -867,7 +866,7 @@ get_pkgs() {
             # Commands which print packages one per line.
             has scoop && {
                 scoopbin=$(command -v scoop)
-                count_pkg scoop 1 printf '%s\n' "${scoopbin%/*}"/../apps/*
+                count_pkg scoop 1 glob "${scoopbin%/*}/../apps/*"
             }
             has winget     && count_pkg winget 2 winget list
             has choco      && count_pkg chocolatey 2 choco list
@@ -889,7 +888,7 @@ get_pkgs() {
         ;;
 
         (OpenBSD*)
-            count_pkg OpenBSD 0 printf '%s\n' /var/db/pkg/*/
+            count_pkg OpenBSD 0 glob '/var/db/pkg/*/'
         ;;
 
         (NetBSD*)
@@ -897,11 +896,11 @@ get_pkgs() {
         ;;
 
         (Haiku)
-            count_pkg Haiku 0 printf '%s\n' /boot/system/package-links/*
+            count_pkg Haiku 0 glob '/boot/system/package-links/*'
         ;;
 
         (Minix)
-            count_pkg Minix 0 printf '%s\n' /usr/pkg/var/db/pkg/*/
+            count_pkg Minix 0 glob '/usr/pkg/var/db/pkg/*/'
         ;;
 
         (SunOS)
