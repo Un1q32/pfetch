@@ -852,6 +852,7 @@ get_pkgs() {
 
             has appimaged &&
                 count_pkg appimage 0 glob "$HOME/.local/bin/*.[Aa]pp[Ii]mage" "$HOME/Applications/*.[Aa]pp[Ii]mage"
+            has emerald   && count_pkg emerald 0 printf '%s\n' /var/lib/emerald/db/*
 
             # Has devbox & is initialized
             has devbox &&
@@ -2461,6 +2462,22 @@ get_ascii() {
 					| | \___/ | |
 					| \\______ \\_|
 					 -_______\\
+				EOF
+            ;;
+
+            ([Vv]ylen*)
+                read_ascii 2 <<-EOF
+					     ${c2}:^::^~ ~^::^:
+					   :^:   .~ ~.   :^:
+					.:^.     .~ ~.     .^:.
+					~.       .~ ~.       .~
+					~:.......:~ ~:.......:~
+					::::::::::: :::::::::::
+					~:.......:~ ~:.......:~
+					~.       .~.~.       .~
+					.:^.      :::      .^:.
+					   :^:           :^:
+					    :^:::::::::^:
 				EOF
             ;;
 
