@@ -1621,7 +1621,7 @@ get_ascii() {
         # 'PF_COL1': Set the info name color according to ascii color.
         # 'PF_COL3': Set the title color to some other color. ¯\_(ツ)_/¯
         PF_COL1=${PF_COL1:-${1:-7}}
-        PF_COL3=${PF_COL3:-$((${1:-7}%8+1))}
+        PF_COL3=${PF_COL3:-$(((${1:-7}+1)%8))}
 
         # POSIX sh has no 'var+=' so 'var=${var}append' is used. What's
         # interesting is that 'var+=' _is_ supported inside '$(())'
